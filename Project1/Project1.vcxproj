@@ -139,6 +139,7 @@
     <ClInclude Include="structure.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="bms.ini" />
     <None Include="lib.hdb" />
     <None Include="user.hdb" />
