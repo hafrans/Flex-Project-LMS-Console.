@@ -36,7 +36,7 @@ extern char *integerToString(int num)
 	if (str == NULL)
 	{
 		consoleLog("在转化为字符串时出现了无法申请内存的现象");
-		return nullptr;
+		return NULL;
 	}
 	int flag = 0;
 	int count = 0;
@@ -153,7 +153,7 @@ char * delspace(const char * text)
 	if (newstr == NULL)
 	{
 		consoleLog("在清除空格时出现了无法申请内存的现象");
-		return nullptr;
+		return NULL;
 	}
 	for (i = 0; i < len; i++)
 	{
@@ -193,7 +193,7 @@ void consoleLog(const char * text)
 
 const char * testCharNULLPTRToEmptyString(const char * text)
 {
-	if (text == nullptr)
+	if (text == NULL)
 	{
 		return __EMPTY_OR_NULL_ALTERNATIVE_STRING__;
 	}
@@ -215,7 +215,7 @@ char * parseSpaceString(const char * text)
 	if (str == NULL)
 	{
 		consoleLog("在转化空格时出现了无法申请内存的现象");
-		return nullptr;
+		return NULL;
 	}
 	for (i = 0; i < len; i++)
 	{
@@ -240,14 +240,14 @@ char * parseStringSpace(const char * text)
 	if (text == NULL)
 	{
 		crashViewer("0x10000002", "接收数据时侦测到空指针错误");
-		return nullptr;
+		return NULL;
 	}
 	char *space = __SPACE__FILE_READ__;
 	char *str = (char *)calloc(__BUFFSIZE__, sizeof(char));
 	if (str == NULL)
 	{
 		consoleLog("在空格转化时出现了无法申请内存的现象");
-		return nullptr;
+		return NULL;
 	}
 	size_t i = 0;//text循环
 	size_t j = 0;//str循环

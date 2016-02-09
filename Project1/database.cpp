@@ -12,7 +12,7 @@ inline int bookConflict(const pBOOK p)
 {
 	if (p == NULL)
 	{
-		return -2;//nullptr error
+		return -2;//NULL error
 	}
 	pBOOK temp = head;
 
@@ -30,7 +30,7 @@ int bookAdd(pBOOK p)
 {
 	if (p == NULL)
 	{
-		return -2;//nullptr error
+		return -2;//NULL error
 	}
 	
 	if (bookConflict(p))
@@ -194,7 +194,7 @@ inline int usrConflict(const pUSER p)
 
 	if (p == NULL)
 	{
-		return -2;//nullptr error
+		return -2;//NULL error
 	}
 	pUSER temp = uhead;
 
@@ -224,7 +224,7 @@ int userAdd(pUSER p)
 {
 	if (p == NULL)
 	{
-		return -2;//nullptr error
+		return -2;//NULL error
 	}
 	p->next = NULL;
 	p->uid = maxUID++;
@@ -242,7 +242,7 @@ int userAdd(pUSER p)
 
 	while (temp != NULL)
 	{
-		if (temp->next == nullptr)
+		if (temp->next == NULL)
 		{
 			temp->next = p;
 			return 0;
@@ -363,7 +363,7 @@ pUSER *userSelect(const char *text, int orderby,int maxmum)
 	{
 		consoleLog("在SELECT过程中出现了无法申请内存的现象");
 		affected = -1;
-		return nullptr;
+		return NULL;
 	}
 	affected = 0;
 	pUSER temp = uhead;

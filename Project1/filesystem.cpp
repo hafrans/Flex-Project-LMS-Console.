@@ -95,7 +95,7 @@ int flushBOOK(int close = 0)
 		fopen_s(&handle, config->libPath, "w+");
 		if (handle == NULL)
 		{
-			return -2;// nullptr error
+			return -2;// NULL error
 		}
 
 		while (tmpHead != NULL)
@@ -140,7 +140,7 @@ int flushUSER(int close = 0)
 	fopen_s(&handle, config->userPath, "w+");
 	if (handle == NULL)
 	{
-		return -2;// nullptr error
+		return -2;// NULL error
 	}
 	while (tmpHead != NULL)
 	{
