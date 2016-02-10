@@ -57,12 +57,12 @@ int main()
 	/*
 		程序设置文档请写在此处。
 	*/
-	//pBOOK *p = bookSelect("94");
-	//showBookLists(p);
-	selectBooksViewer();
+	pUSER *p = userSelect("n");
+	showUserLists(p);
+	//selectBooksViewer();
 
 
-
+	
 
 
 

@@ -424,7 +424,7 @@ void mainLayoutViewer()
 		consoleDrawText("【管理员功能】");
 		consoledrawBorder(2, 1, ALIGN_CENTER);
 		consoleDrawText("(7/dhbd)系统信息     (8/cusr)修改用户");
-		consoleDrawText("(9/lkur)锁定用户     (0/adur)增加用户");
+		consoleDrawText("(9/lkur)查询用户     (0/adur)增加用户");
 		consoleDrawText("(a/adbk)添加图书     (b/cgbk)修改图书");
 	}
 	consoleDrawText("(?/help)命令查询     (e/exit)退出系统");
@@ -466,8 +466,6 @@ void bookAppend()
 		printf("请输入图书已借数量： ");
 		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
 		p->borrowed = (short)stringToLong(buf);
-		int c;
-		//while ((c = getchar()) != '\n' || c != EOF);
 		p->addtime = (long)time(NULL);
 		bookDetails(p);
 		printf("您确认添加该图书？(y/N) ");
@@ -488,6 +486,7 @@ void bookAppend()
 				}
 			}
 			else {
+				flushBOOK(0);
 				puts("添加成功！");
 			}
 			break;
@@ -582,7 +581,7 @@ void systemInfoViewer()
 
 void showBookLists(pBOOK *p)
 {
-	int count, i;
+	int i;
 	char buf[__BUFFSIZE__] = { '\0' };
 	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	puts("+     ISBN      +            图书名称            +  入库时间  +       存储书库       + 剩余  +");
@@ -655,5 +654,34 @@ void selectBooksViewer()
 	else {
 		showBookLists(NULL);
 	}
+	return;
+}
+
+void showUserLists(pUSER *p)
+{
+	int i;
+	char buf[__BUFFSIZE__] = { '\0' };
+	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	puts("+     UID       +            用户名称            +  用户权限  + 用户状态 +");
+	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	if (p == NULL)
+	{
+		pUSER temp = uhead;
+		while (temp != NULL)
+		{
+			sprintf_s(buf, __BUFFSIZE__, "+ %13ld + %30s + %10hd + %8hd +", temp->uid, temp->username, temp->permission, temp->status);
+			puts(buf);
+			temp = temp->next;
+		}
+	}
+	else {
+		for (i = 0; i < getAffected(); i++)
+		{
+			pUSER temp = p[i];
+			sprintf_s(buf, __BUFFSIZE__, "+ %13ld + %30s + %10hd + %8hd +", temp->uid, temp->username, temp->permission, temp->status);
+			puts(buf);
+		}
+	}
+	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return;
 }

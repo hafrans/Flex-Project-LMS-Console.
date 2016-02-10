@@ -2,7 +2,7 @@
 	全局引用头文件
 	Date:2016/01/13
 */
-//#define DEBUG 
+#define DEBUG 
 //是否开启 调试模式
 #pragma once
 //全局宏定义
