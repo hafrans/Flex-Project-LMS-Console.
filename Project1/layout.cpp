@@ -1,6 +1,8 @@
 #include "project.h"
 #include "layout.h"
 
+
+char *state = NULL;
 inline void firstPageDrawText(char *text = "请等待", int wait = 0, char *version = "loading...")
 {
 	consoleClear();
@@ -446,30 +448,78 @@ void bookAppend()
 		pBOOK p = (pBOOK)malloc(sizeof(BOOK));
 		puts("/******************添加图书*******************/");
 		printf("请输入图书ISBN： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || strcmp(buf,"") == 0 );
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf,"") == 0 )
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		stringSave(p->ISBN, delspace(buf));
 		printf("请输入图书书名： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		stringSave(p->name, buf);
 		printf("请输入图书作者： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		stringSave(p->author, buf);
 		printf("请输入图书出版社： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		stringSave(p->publish,buf);
 		printf("请输入图书书库： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		stringSave(p->store,buf);
 		printf("请输入图书总量： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		p->total = (short)stringToLong(buf);
 		printf("请输入图书已借数量： ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		p->borrowed = (short)stringToLong(buf);
 		p->addtime = (long)time(NULL);
 		bookDetails(p);
 		printf("您确认添加该图书？(y/N) ");
-		while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    adbk"); return;
+			}
+		}
 		if (*buf == 'y' || *buf == 'Y')
 		{
 			int result = 0;
@@ -636,7 +686,13 @@ void selectBooksViewer()
 	puts("+    2 - 存储书库  +");
 	puts("++++++++++++++++++++");
 	printf("请按照上面的提示输入以下的查找方法，否则默认为ISBN： ");
-	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    fdbk"); return;
+		}
+	}
 	if (strcmp(buf, "") != 0)
 	{
 		if (*buf >= '0' && *buf <= '2')
@@ -645,7 +701,13 @@ void selectBooksViewer()
 		}
 	}
 	printf("请输入您要查找的字段，否则默认为全部显示： ");
-	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			return;
+		}
+	}
 	if (strcmp(buf, "") != 0)
 	{
 		p = bookSelect(buf,orderby,1024);
@@ -693,18 +755,32 @@ void userSelectViewer()
 	puts("+++++++++++++++++++++++");
 	puts("+    0|按照用户名     +");
 	puts("+    1|按照UID        +");
+	puts("+    2|按照状态       +");
+	puts("+    3|按照权限       +");
 	puts("+++++++++++++++++++++++");
 	printf("请输入查找方式，默认为用户名： ");
-	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    fdur"); return;
+		}
+	}
 	if (strcmp(buf, "") != 0)
 	{
-		if (*buf >= '0' && *buf <= '1')
+		if (*buf >= '0' && *buf <= '3')
 		{
 			orderby = (*buf) - 48;
 		}
 	}
 	printf("请输入您要查找的内容，默认是全部： ");
-	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    fdur"); return;
+		}
+	}
 	if (strcmp(buf, "") != 0)
 	{
 		pUSER *p = userSelect(buf,orderby,1024);
@@ -714,6 +790,62 @@ void userSelectViewer()
 		showUserLists(NULL);
 	}
 	puts("请输入特殊指令进行快捷操作..");
+	return;
+}
+
+void changeUserViewer() 
+{
+	char buf[__BUFFSIZE__] = {'\0'};
+	pUSER *p = NULL;
+	puts("*******注意：请牢记用户的uid再进行操作，以免造成不必要的麻烦*******");
+	puts("");
+	while (1)
+	{
+		printf("请输入用户的uid： ");
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL  || *buf == '\0')
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    cusr"); return;
+			}
+		}
+		p = userSelect(buf, 1, 1);
+		userDetails(*p);
+		printf("确定是这个用户么？ (y/N) ");
+		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || *buf == '\0')
+		{
+			if (state == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    cusr"); return;
+			}
+		}
+		if (*buf == 'y' || *buf == 'Y')
+		{
+			break;
+		}
+		else {
+			continue;
+		}
+	}
+	printf("请输入用户密码，回车默认不修改： ");
+	while (gets_s(buf, __BUFFSIZE__) == NULL );
+	if (strcmp(buf, "") != 0)
+	{
+		stringSave((*p)->passwd,buf);
+	}
+	printf("请输入用户权限，回车默认不修改： ");
+	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	if (strcmp(buf, "") != 0)
+	{
+		(*p)->permission = (short)stringToLong(buf);
+	}
+	printf("请输入用户状态，回车默认不修改： ");
+	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	if (strcmp(buf, "") != 0)
+	{
+		(*p)->status = (short)stringToLong(buf);
+	}
+	puts("修改成功！");
 	return;
 }
 

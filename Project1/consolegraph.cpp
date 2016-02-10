@@ -233,6 +233,10 @@ void consoleWaitinCMD()
 		{
 			userSelectViewer();
 		}
+		else if (strcmp(cmd, "cusr") == 0 || *cmd == '8' && currentPer > 5)
+		{
+			changeUserViewer();
+		}
 		else {
 			printf("-fshell: %s : command not found.\n",cmd);
 		}

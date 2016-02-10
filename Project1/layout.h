@@ -53,6 +53,8 @@ extern void showUserLists(pUSER * p);
 
 extern void userSelectViewer();
 
+extern void changeUserViewer();
+
 #endif
 
 

@@ -378,7 +378,7 @@ pUSER *userSelect(const char *text, int orderby,int maxmum)
 				}
 				break;
 			case 1:
-				if (strstr(integerToString((long)temp->username), text) != NULL)
+				if (strstr(integerToString((long)temp->uid), text) != NULL)
 				{
 					*(arr + affected++) = temp;
 				}
