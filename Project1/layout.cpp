@@ -25,6 +25,7 @@ int init()
 	if (iniReader())
 	{
 		firstPageDrawText("加载失败！错误0x263e", 2000);
+		consoleLog("can not load the ini file");
 		return 1;
 	}
 	firstPageDrawText("正在加载数据库", 200, config->version);
