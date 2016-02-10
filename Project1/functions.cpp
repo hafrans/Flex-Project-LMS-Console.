@@ -157,7 +157,7 @@ char * delspace(const char * text)
 	}
 	for (i = 0; i < len; i++)
 	{
-		if (isspace(text[i]))
+		if (text[i]>=0 && text[i]<=32)
 		{
 			continue;
 		}

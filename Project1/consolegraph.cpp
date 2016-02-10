@@ -176,7 +176,7 @@ void consoleWaitinCMD()
 	}
 	while (1)
 	{
-		printf("[%s @ LMS]%c", currentUsr, cmdc);
+		printf("[%s@LMS]%c", currentUsr, cmdc);
 		if (!gets_s(cmd, __BUFFSIZE__) || *cmd == '\0')
 		{
 			continue;
@@ -212,7 +212,7 @@ void consoleWaitinCMD()
 		else if (strcmp(cmd, "exit") == 0 || strcmp(cmd, "E") == 0 || strcmp(cmd, "e") == 0)
 		{
 			printf("将要退出程序，请回车继续。。");
-			int c = getchar();
+			Sleep(1500);
 			puts("正在退出...");
 			Sleep(1500);
 			return;
@@ -221,12 +221,16 @@ void consoleWaitinCMD()
 		{
 			userRegister();
 		}
+		else if (strcmp(cmd, "fdbk") == 0 || *cmd == '3')
+		{
+			selectBooksViewer();
+		}
 		else if (strcmp(cmd, "dhbd") == 0 || *cmd == '7' && currentPer > 5)
 		{
 			systemInfoViewer();
 		}
 		else {
-			puts("不存在或者不支持该项命令");
+			printf("-fshell: %s : command not found.\n",cmd);
 		}
 	}
 }

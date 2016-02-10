@@ -16,6 +16,7 @@ extern int page = 0;
 
 int main()
 {
+	consoleTitleSet("Hafrans Flex LMS Alpha");
 	if (init())
 	{
 		printf("程序出现错误，正在退出...");
@@ -71,9 +72,10 @@ int main()
 	puts("已到达程序底部");
 	getchar();
 #endif
+	/*冲刷数据*/
 	flushBOOK(0);
 	flushUSER(0);
-	
+	//Sleep(1000);
 	return 0;
 
 }
