@@ -229,6 +229,10 @@ void consoleWaitinCMD()
 		{
 			systemInfoViewer();
 		}
+		else if (strcmp(cmd, "fdur") == 0 || *cmd == '9' && currentPer > 5)
+		{
+			userSelectViewer();
+		}
 		else {
 			printf("-fshell: %s : command not found.\n",cmd);
 		}

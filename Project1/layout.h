@@ -51,6 +51,8 @@ extern void selectBooksViewer();
 
 extern void showUserLists(pUSER * p);
 
+extern void userSelectViewer();
+
 #endif
 
 

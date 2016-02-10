@@ -424,7 +424,7 @@ void mainLayoutViewer()
 		consoleDrawText("【管理员功能】");
 		consoledrawBorder(2, 1, ALIGN_CENTER);
 		consoleDrawText("(7/dhbd)系统信息     (8/cusr)修改用户");
-		consoleDrawText("(9/lkur)查询用户     (0/adur)增加用户");
+		consoleDrawText("(9/fdur)查询用户     (0/adur)增加用户");
 		consoleDrawText("(a/adbk)添加图书     (b/cgbk)修改图书");
 	}
 	consoleDrawText("(?/help)命令查询     (e/exit)退出系统");
@@ -685,3 +685,35 @@ void showUserLists(pUSER *p)
 	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return;
 }
+
+void userSelectViewer()
+{
+	char buf[__BUFFSIZE__] = { '\0' };
+	int orderby = 0;
+	puts("+++++++++++++++++++++++");
+	puts("+    0|按照用户名     +");
+	puts("+    1|按照UID        +");
+	puts("+++++++++++++++++++++++");
+	printf("请输入查找方式，默认为用户名： ");
+	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	if (strcmp(buf, "") != 0)
+	{
+		if (*buf >= '0' && *buf <= '1')
+		{
+			orderby = (*buf) - 48;
+		}
+	}
+	printf("请输入您要查找的内容，默认是全部： ");
+	while (gets_s(buf, __BUFFSIZE__) == NULL);
+	if (strcmp(buf, "") != 0)
+	{
+		pUSER *p = userSelect(buf,orderby,1024);
+		showUserLists(p);
+	}
+	else {
+		showUserLists(NULL);
+	}
+	puts("请输入特殊指令进行快捷操作..");
+	return;
+}
+
