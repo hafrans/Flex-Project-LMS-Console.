@@ -38,4 +38,10 @@ extern void linkdumpusr();
 
 extern int userAdd(const pUSER p);
 
+extern int userBorrowedBook(const char *str);
+
+extern int bookBorrow(char *isbn, int Days);
+
+extern int bookReturn(char * isbn);
+
 

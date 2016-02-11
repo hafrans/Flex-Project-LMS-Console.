@@ -53,16 +53,8 @@ extern const char *testCharNULLPTRToEmptyString(const char *text);
 	@param char *text 处理字符串
 	@param const _EXPLODE_TYPE dest 指向的指针
 	@return size_t 元素个数
-	Sample :
-	__EXPLODE_TYPE dest;
-	size_t i = 0, count = explode(',',"组别一,组别2,Group3,g4",&dest);
-
-	for (i = 0; i < count; i++)
-	{
-	printf("%s\n",dest[i]);
-	}
 */
-size_t explode(char delimiter, char * string, char **& ptr);
+extern size_t explode(char delimiter, char * string, char **& ptr);
 /*
 	时间戳转时间
 */

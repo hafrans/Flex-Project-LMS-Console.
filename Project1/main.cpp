@@ -57,9 +57,13 @@ int main()
 	/*
 		程序设置文档请写在此处。
 	*/
-	pUSER *p = userSelect("n");
-	showUserLists(p);
+	pUSER *p = userSelect("2",1,1);
+	currentBody = *p;
 	//selectBooksViewer();
+	//bookBorrow("9787123433242",BDAY);
+	int pt = 0;
+	pt = bookReturn("9784323242");
+	printf("%d",pt);
 
 
 	

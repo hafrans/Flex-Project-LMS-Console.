@@ -251,6 +251,12 @@ int userAdd(pUSER p)
 	}
 	return -9; //未知
 }
+/*查询用户借书内容*/
+int userBorrowedBook(const char * str)
+{
+	//size_t count();
+	return 0;
+}
 /*
 	用户删除
 */
@@ -402,4 +408,86 @@ pUSER *userSelect(const char *text, int orderby,int maxmum)
 	}
 	*(arr + affected) = NULL;
 	return arr;
+}
+
+int bookBorrowedList()
+{
+	char **t = NULL;
+	char *tmp = currentBody->book;
+	size_t i = explode('|',tmp, t);
+	return 0;
+}
+int bookBorrow(char *isbn, int Days)
+{
+	char strDueTime[__BUFFSIZE__] = { '\0' };
+	pBOOK p = getSingleBook(isbn);
+	if (getAffected() == 0)
+	{
+		return -2;//所查找数目不存在
+	}
+	
+	if (p->total - p->borrowed <= 0)
+	{
+		return -1;//图书数量不足
+	}
+	p->borrowed++;
+	time_t nowtime = time(NULL);
+	time_t borrowTime = (time_t)(Days * 3600 * 24);
+	time_t dueTime = nowtime + borrowTime;
+		_ltoa_s(dueTime, strDueTime,__BUFFSIZE__, 10);
+	char *newborrow = strcat_t("|",isbn);
+		  newborrow = strcat_t(newborrow, ",");
+		  newborrow = strcat_t(newborrow, strDueTime);
+    char *newstr = strcat_t(currentBody->book,newborrow);
+	strcpy_s(currentBody->book,__BUFFBOOK__,newstr);
+	return 0;//借书完成
+}
+
+int bookReturn(char *isbn)
+{
+	char **t = NULL;
+	char *str = (char *)calloc(__BUFFBOOK__,sizeof(char));
+	strcpy_s(str,__BUFFBOOK__,currentBody->book);
+	size_t count;
+	size_t i = explode('|',str,t);
+	if (i <= 1)
+	{
+		return -3; // 无书可还
+	}
+	for (count = 1; count < i; count++)
+	{
+		if (strstr(t[count], isbn) != NULL)
+		{
+			break;
+		}
+	}
+	if (count == i)
+	{
+		return -2;//查询不到书目
+	}
+	pBOOK *ep = bookSelect(isbn,0,1);
+	if (!getAffected())
+	{
+		return 1; // 书库中无法查询到
+	}
+	ep[0]->borrowed -= 1;
+	size_t tr = 0;
+	char *newstr = (char *)calloc(__BUFFBOOK__, sizeof(char));
+	newstr = strcat_t(newstr, "0");
+	for (tr = 1;tr < i; tr++)
+	{
+
+		if (tr == count)
+		{
+			continue;
+		}
+		newstr = strcat_t(newstr,"|");
+		newstr = strcat_t(newstr,t[tr]);
+	}
+	strcpy_s(currentBody->book, __BUFFBOOK__, newstr);
+#ifdef DEBUG
+	puts(t[count]);
+#endif
+	
+	return 0;
 }

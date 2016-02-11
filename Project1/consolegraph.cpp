@@ -205,6 +205,10 @@ void consoleWaitinCMD()
 				userPwdChange();
 			}
 		}
+		else if (strcmp(cmd, "bobk") == 0 || *cmd == '5')
+		{
+			bookBorrowViewer();
+		}
 		else if (strcmp(cmd, "help") == 0 || *cmd == '?' || strcmp(cmd, "£¿") == 0)
 		{
 			mainLayoutViewer();

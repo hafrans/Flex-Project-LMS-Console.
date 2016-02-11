@@ -162,7 +162,7 @@ int userRegister()
 	stringSave(p->username, "test");
 	p->permission = (short) 0;
 	p->status = (short) 0;
-	strcpy_s(p->book,__BUFFBOOK__,"0|");
+	strcpy_s(p->book,__BUFFBOOK__,"0");
 	while (1)
 	{
 		consoleClear();
@@ -705,7 +705,7 @@ void selectBooksViewer()
 	{
 		if (state == NULL)
 		{
-			return;
+			puts("\n\n[ +1 ]      Stopped    fdbk"); return;
 		}
 	}
 	if (strcmp(buf, "") != 0)
@@ -848,4 +848,59 @@ void changeUserViewer()
 	puts("修改成功！");
 	return;
 }
+pBOOK getSingleBook(char *isbn)
+{
+	pBOOK *p = bookSelect(isbn, 0, 1);
+	if (getAffected() == 0)
+	{
+		return NULL;
+	}
+	return *p;
+}
 
+void bookBorrowViewer()
+{
+	char buf[__BUFFSIZE__] = { '\0' };
+	puts("***注意 ： 借阅图书的时候请记住图书的ISBN ，以免造成不必要的麻烦 ***");
+	printf("请输入您所要借阅的图书的ISBN号码： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || *buf == '\0')
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    bobk"); return;
+		}
+	}
+	pBOOK p = getSingleBook(buf);
+	if (p == NULL)
+	{
+		puts("不存在你所要查找的图书哦");
+		return;
+	}
+	bookDetails(p);
+	printf("确定借阅这本%s 吗？(y/N)",p->name);
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || *buf == '\0')
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    bobk"); return;
+		}
+	}
+	if (*buf == 'Y' || *buf == 'y')
+	{
+		int o = 0;
+		if (o = bookBorrow(p->ISBN, BDAY))
+		{
+			if (o == -2)
+			{
+				puts("图书数量已经不适合再借阅！");
+			}
+			else {
+				puts("本图书现在已经被删除或者不存在");
+			}
+
+			return;
+		}
+		puts("借书完成");
+	}
+	return;
+}
