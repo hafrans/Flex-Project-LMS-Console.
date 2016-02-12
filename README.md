@@ -1,6 +1,10 @@
-# study-c
+# Flex LMS ConsoleVer (use c)
 
-Please compile this c program under VS2015 environment. 
+请在VS2015环境下编译本软件，这个只是一个C语言的课程设计，我只是用它来练习我的编程能力。
+
+Compile the software in VS2015 environment, this is just a C language curriculum design, I just use it to practice my programming skills.
+
+VS2015環境でソフトウェアをコンパイルし、これはちょうどC言語のカリキュラムの設計ですが、私はちょうど私のプログラミングのスキルを練習するためにそれを使用しています。
 
 0.9.99
 --------------------------------------------------------
