@@ -87,6 +87,12 @@ extern pBOOK getSingleBook(char *isbn);
 */
 extern void bookBorrowViewer();
 
+extern void bookReturnViewer();
+
+extern void bookBorrowListsViewer();
+
+extern void bookChangeViewer();
+
 
 
 

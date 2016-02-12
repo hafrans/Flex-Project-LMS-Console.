@@ -5,8 +5,7 @@
 int affected = 0;
 
 /*
-	书增加
-
+	高级图书ISBN验证
 */
 inline int bookConflict(const pBOOK p)
 {
@@ -26,6 +25,9 @@ inline int bookConflict(const pBOOK p)
 	}
 	return 0;
 }
+/*
+	高级图书添加
+*/
 int bookAdd(pBOOK p)
 {
 	if (p == NULL)
@@ -65,15 +67,38 @@ int bookAdd(pBOOK p)
 	}
 	return -9;//未知
 }
-
+/*
+	高级图书删除函数
+*/
 int bookDeleteAdv(pBOOK p)
 {
+	pBOOK temp = head;
+	pBOOK _FATHER_T = NULL;
 	if (p == NULL)
 	{
 		return -2;
 	}
 	pBOOK tmpGC = p;
-	p = p->next;
+	if (p == head)
+	{
+		head = head->next;
+	}
+	else {
+		while (temp != NULL)
+		{
+			if (temp->next == p)
+			{
+				_FATHER_T = temp;
+				break;
+			}
+			temp = temp->next;
+		}
+		if (temp == NULL)
+		{
+			return -9;//未知错误
+		}
+		_FATHER_T->next = p->next;
+	}
 	free(tmpGC);
 	return 0;
 }
@@ -140,7 +165,7 @@ pBOOK *bookSelect(const char *text,int orderby,int maxnum)
 	{
 		switch (orderby)
 		{
-			case 0: // ISBN 查找
+			case 0: // ISBN 查找(模糊)
 				if (strstr(temp->ISBN, text) != NULL)
 				{
 					*(arr + affected++) = temp;
@@ -154,6 +179,12 @@ pBOOK *bookSelect(const char *text,int orderby,int maxnum)
 				break;
 			case 2:  //图书书库查找
 				if (strstr(temp->store, text) != NULL)
+				{
+					*(arr + affected++) = temp;
+				}
+				break;
+			case -1: // ISBN 查找(精确)
+				if (strcmp(temp->ISBN, text) == 0 )
 				{
 					*(arr + affected++) = temp;
 				}
@@ -210,12 +241,34 @@ inline int usrConflict(const pUSER p)
 }
 int userDeleteAdv(pUSER p)
 {
+
+	pUSER temp = uhead;
+	pUSER _FATHER_T = NULL;
 	if (p == NULL)
 	{
 		return -2;
 	}
 	pUSER tmpGC = p;
-	p = p->next;
+	if (p == uhead)
+	{
+		uhead = uhead->next;
+	}
+	else {
+		while (temp != NULL)
+		{
+			if (temp->next == p)
+			{
+				_FATHER_T = temp;
+				break;
+			}
+			temp = temp->next;
+		}
+		if (temp == NULL)
+		{
+			return -9;//未知错误
+		}
+		_FATHER_T->next = p->next;
+	}
 	free(tmpGC);
 	return 0;
 }
@@ -384,7 +437,7 @@ pUSER *userSelect(const char *text, int orderby,int maxmum)
 				}
 				break;
 			case 1:
-				if (strstr(integerToString((long)temp->uid), text) != NULL)
+				if (strcmp(integerToString((long)temp->uid), text) == 0)
 				{
 					*(arr + affected++) = temp;
 				}

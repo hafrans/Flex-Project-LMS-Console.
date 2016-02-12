@@ -184,6 +184,7 @@ void consoleWaitinCMD()
 		if (strcmp(cmd,"adbk") == 0 || strcmp(cmd, "a") == 0 || strcmp(cmd, "A") == 0)
 		{
 			bookAppend();
+			flushBOOK(0);
 		}
 		else if (strcmp(cmd, "info") == 0 || *cmd == '1')
 		{
@@ -203,11 +204,45 @@ void consoleWaitinCMD()
 			}
 			else {
 				userPwdChange();
+				flushUSER(0);
 			}
 		}
 		else if (strcmp(cmd, "bobk") == 0 || *cmd == '5')
 		{
-			bookBorrowViewer();
+			if (currentPer == 9)
+			{
+				puts("最高权限账户不支持该项功能");
+			}
+			else {
+				bookBorrowViewer();
+				flushBOOK(0);
+				flushUSER(0);
+			}
+			
+		}
+		else if (strcmp(cmd, "rtbk") == 0 || *cmd == '6')
+		{
+			if (currentPer == 9)
+			{
+				puts("最高权限账户不支持该项功能");
+			}
+			else {
+				bookReturnViewer();
+				flushBOOK(0);
+				flushUSER(0);
+			}
+
+		}
+		else if (strcmp(cmd, "bdbk") == 0 || *cmd == '4')
+		{
+			if (currentPer == 9)
+			{
+				puts("最高权限账户不支持该项功能");
+			}
+			else {
+				bookBorrowListsViewer();
+			}
+
 		}
 		else if (strcmp(cmd, "help") == 0 || *cmd == '?' || strcmp(cmd, "？") == 0)
 		{
@@ -240,6 +275,11 @@ void consoleWaitinCMD()
 		else if (strcmp(cmd, "cusr") == 0 || *cmd == '8' && currentPer > 5)
 		{
 			changeUserViewer();
+		}
+		else if (strcmp(cmd, "cgbk") == 0 || strcmp(cmd, "b") == 0 || strcmp(cmd, "B") == 0 && currentPer > 5)
+		{
+			bookChangeViewer();
+			flushBOOK(0);
 		}
 		else {
 			printf("-fshell: %s : command not found.\n",cmd);

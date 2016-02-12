@@ -14,6 +14,12 @@ int loadBOOK()
 		printf("Read %s Failed but the program can open the file", config->libPath);
 		return 1;
 	}
+	fgetc(handle);
+	if (feof(handle))
+	{
+		fclose(handle);
+		return 0;
+	}
 	rewind(handle);
 	while(!feof(handle))
 	{
@@ -61,6 +67,13 @@ int loadUSER()
 		printf("Read %s Failed but the program can open the file", config->userPath);
 		return 1;
 	}
+	fgetc(handle);
+	if (feof(handle))
+	{
+		fclose(handle);
+		return 0;
+	}
+	rewind(handle);
 	while (!feof(handle))
 	{
 		pUSER newuser = (pUSER)malloc(sizeof(USER));
@@ -95,6 +108,7 @@ int flushBOOK(int close = 0)
 		fopen_s(&handle, config->libPath, "w+");
 		if (handle == NULL)
 		{
+			crashViewer("0x000000013 (0x00000002 0x00000011)","FILE NULLPTR ERROR");
 			return -2;// NULL error
 		}
 
@@ -140,6 +154,7 @@ int flushUSER(int close = 0)
 	fopen_s(&handle, config->userPath, "w+");
 	if (handle == NULL)
 	{
+		crashViewer("0x000000013 (0x00000002 0x00000011)", "FILE NULLPTR ERROR");
 		return -2;// NULL error
 	}
 	while (tmpHead != NULL)

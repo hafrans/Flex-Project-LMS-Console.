@@ -42,6 +42,7 @@ int main()
 		else if (strcmp(buf, "2") == 0)
 		{
 			userRegister();
+			flushUSER(0);
 		}
 	}
 	mainLayoutViewer();

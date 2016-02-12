@@ -1,7 +1,5 @@
 #include "project.h"
 #include "layout.h"
-
-
 char *state = NULL;
 inline void firstPageDrawText(char *text = "请等待", int wait = 0, char *version = "loading...")
 {
@@ -46,7 +44,9 @@ int init()
 	return 0;
 
 }
-
+/*
+	登陆窗口命令
+*/
 extern void loginPageViewer()
 {
 	page = 1;
@@ -69,7 +69,6 @@ extern void loginPageViewer()
 	//firstPage();
 
 }
-
 
 inline void loginStatusViewer(char *text, char *color = "")
 {
@@ -117,7 +116,7 @@ extern void loginStatus(enum LOGIN status)
 	}
 }
 
-void crashViewer(const char * text,const char *text2)
+extern void crashViewer(const char * text,const char *text2)
 {
 	char *str = strcat_t(" **STOP : ",text);
 	char *log = strcat_t(str, text2);
@@ -145,12 +144,13 @@ void crashViewer(const char * text,const char *text2)
 	consoledrawBorder(2, 2, ALIGN_CENTER);
 	consoleDrawText(config->version, ALIGN_CENTER, ALIGN_RIGHT);
 	consoledrawBorder(1, 1, ALIGN_CENTER);
+	Sleep(4147483647);
 }
 
-int userRegister()
+extern int userRegister()
 {
 	consoleClear();
-	
+	char buf2[__BUFFSIZE__] = { '\0' };
 	char buf[__BUFFSIZE__] = { '\0' };
 	if (strstr(config->administrator, "noreg") != NULL)
 	{
@@ -173,7 +173,16 @@ int userRegister()
 			{
 				printf("用户名规则：长度大于3小于10的英文或数字\n");
 				printf("请输入您的用户名 ");
-				while (gets_s(buf, __BUFFSIZE__) == NULL || buf[0] == '\0' || strcmp("",buf) == 0);
+				while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || buf[0] == '\0' || strcmp("", buf) == 0) {
+					if (state == NULL && currentBody != NULL)
+					{
+						puts("\n\n[ +1 ]      Stopped    adur"); return -1;
+					}
+					if (state == NULL)
+					{
+						return -1;
+					}
+				}
 				int len = strlen(buf);
 				while (--len)
 				{
@@ -202,13 +211,11 @@ int userRegister()
 		stringSave(buf, "");
 		while (1)
 		{
-			char buf2[__BUFFSIZE__] = { '\0' };
-
 			while (strlen(buf) < 4 || strlen(buf) >= 16)
 			{
 				printf("密码规则：长度大于3小于16的英文或数字\n");
 				printf("请输入您的密码 ");
-				gets_s(buf, __BUFFSIZE__);
+				while (gets_s(buf, __BUFFSIZE__) == NULL || *buf == '\0');
 				int len = strlen(buf);
 				while (--len)
 				{
@@ -222,7 +229,7 @@ int userRegister()
 					stringSave(buf, "");
 				}
 				printf("请再次输入您的密码 ");
-				while (gets_s(buf2, __BUFFSIZE__) == NULL || buf2[0] == '\0');
+				while (gets_s(buf2, __BUFFSIZE__) == NULL || *buf2 == '\0');
 				if (strcmp(buf, buf2) != 0)
 				{
 					stringSave(buf, "");
@@ -285,15 +292,15 @@ int userRegister()
 			break;
 		}
 		else {
-			continue;
+			return -1;
 		}
 	}
 	return 0;
 }
 
-int userLogin()
+extern int userLogin()
 {
-
+	char *__PWD_FIX;
 	consoleClear();
 	while (1)
 	{
@@ -309,8 +316,12 @@ int userLogin()
 		if (strcmp(buf, config->administrator) == 0 )
 		{
 			printf("请输入密码 ");
-			while (strcmp(gets_s(buf, __BUFFSIZE__), config->passwd) != 0 && c < 3)
+			while (strcmp(( __PWD_FIX = gets_s(buf, __BUFFSIZE__)?buf:__SPACE__FILE_READ__), config->passwd) != 0 && c < 3)
 			{
+				if (strcmp(__PWD_FIX, __SPACE__FILE_READ__) == 0)
+				{
+					return -1;
+				}
 				printf("密码错误，请重新输入密码： ");
 				c++;
 			}
@@ -335,8 +346,13 @@ int userLogin()
 			continue;
 		}
 		printf("请输入密码 ");
-		while (strcmp(gets_s(buf, __BUFFSIZE__), (*p)->passwd) != 0 && c < 3)
+		while (strcmp((__PWD_FIX = gets_s(buf, __BUFFSIZE__) ? buf : __SPACE__FILE_READ__), (*p)->passwd) != 0 && c < 3)
 		{
+
+			if (strcmp(__PWD_FIX, __SPACE__FILE_READ__) == 0)
+			{
+				return -1;
+			}
 			printf("密码错误，请重新输入密码： ");
 			c++;
 		}
@@ -363,7 +379,7 @@ int userLogin()
 	return 0;
 }
 
-void bookDetails(pBOOK p)
+extern void bookDetails(pBOOK p)
 {
 	time_t nowtime = p->addtime;//time(NULL); //取得当前时间戳
 	struct tm ptr;
@@ -394,7 +410,7 @@ void bookDetails(pBOOK p)
 /*
 	顯示用戶信息
 */
-void userDetails(pUSER p)
+extern void userDetails(pUSER p)
 {
 	consoleClear();
 	consoledrawBorder(1, 1, ALIGN_CENTER);
@@ -410,7 +426,7 @@ void userDetails(pUSER p)
 	return;
 }
 
-void mainLayoutViewer()
+extern void mainLayoutViewer()
 {
 	consoleClear();
 	consoledrawBorder(1, 1, ALIGN_CENTER);
@@ -439,7 +455,7 @@ void mainLayoutViewer()
 	return;
 }
 
-void bookAppend()
+extern void bookAppend()
 {
 	consoleClear();
 	char buf[__BUFFSIZE__] = {'\0'};
@@ -548,12 +564,17 @@ void bookAppend()
 	return;
 }
 
-void userPwdChange()
+extern void userPwdChange()
 {
 	char buf[__BUFFSIZE__] = { '\0' };
 	char buf2[__BUFFSIZE__] = { '\0' };
 	printf("请输入当前密码： ");
-	while (gets_s(buf, __BUFFSIZE__) == NULL || buf[0] == '\0');
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || buf[0] == '\0') {
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cpwd"); return;
+		}
+	}
 	if (strcmp(buf, currentBody->passwd) != 0)
 	{
 		puts("密码有误，请重试！");
@@ -601,7 +622,7 @@ void userPwdChange()
 	return;
 }
 
-void systemInfoViewer()
+extern void systemInfoViewer()
 {
 	time_t nowtime = time(NULL); //取得当前时间戳
 	struct tm ptr;
@@ -629,7 +650,7 @@ void systemInfoViewer()
 	return;
 }
 
-void showBookLists(pBOOK *p)
+extern void showBookLists(pBOOK *p)
 {
 	int i;
 	char buf[__BUFFSIZE__] = { '\0' };
@@ -675,7 +696,8 @@ void showBookLists(pBOOK *p)
 	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return;
 }
-void selectBooksViewer()
+
+extern void selectBooksViewer()
 {
 	char buf[__BUFFSIZE__] = { '\0' };
 	pBOOK *p = NULL;
@@ -719,7 +741,7 @@ void selectBooksViewer()
 	return;
 }
 
-void showUserLists(pUSER *p)
+extern void showUserLists(pUSER *p)
 {
 	int i;
 	char buf[__BUFFSIZE__] = { '\0' };
@@ -748,7 +770,7 @@ void showUserLists(pUSER *p)
 	return;
 }
 
-void userSelectViewer()
+extern void userSelectViewer()
 {
 	char buf[__BUFFSIZE__] = { '\0' };
 	int orderby = 0;
@@ -793,7 +815,7 @@ void userSelectViewer()
 	return;
 }
 
-void changeUserViewer() 
+extern void changeUserViewer()
 {
 	char buf[__BUFFSIZE__] = {'\0'};
 	pUSER *p = NULL;
@@ -810,6 +832,11 @@ void changeUserViewer()
 			}
 		}
 		p = userSelect(buf, 1, 1);
+		if (p == NULL || getAffected() == 0 )
+		{
+			puts("本用户不存在");
+			return;
+		}
 		userDetails(*p);
 		printf("确定是这个用户么？ (y/N) ");
 		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || *buf == '\0')
@@ -848,17 +875,19 @@ void changeUserViewer()
 	puts("修改成功！");
 	return;
 }
-pBOOK getSingleBook(char *isbn)
+extern pBOOK getSingleBook(char *isbn)
 {
-	pBOOK *p = bookSelect(isbn, 0, 1);
+	pBOOK *p = bookSelect(isbn, -1, 1);
 	if (getAffected() == 0)
 	{
 		return NULL;
 	}
 	return *p;
 }
-
-void bookBorrowViewer()
+/*
+	借阅图书命令
+*/
+extern void bookBorrowViewer()
 {
 	char buf[__BUFFSIZE__] = { '\0' };
 	puts("***注意 ： 借阅图书的时候请记住图书的ISBN ，以免造成不必要的麻烦 ***");
@@ -890,9 +919,9 @@ void bookBorrowViewer()
 		int o = 0;
 		if (o = bookBorrow(p->ISBN, BDAY))
 		{
-			if (o == -2)
+			if (o == -1)
 			{
-				puts("图书数量已经不适合再借阅！");
+				puts("图书数量已经不适合借阅！");
 			}
 			else {
 				puts("本图书现在已经被删除或者不存在");
@@ -902,5 +931,216 @@ void bookBorrowViewer()
 		}
 		puts("借书完成");
 	}
+	return;
+}
+/*
+	图书归还命令
+*/
+extern void bookReturnViewer()
+{
+	int ___Result__return_book = 0;
+	char buf[__BUFFSIZE__] = { '\0' };
+	puts("***注意 ：归还图书的时候请记住图书的ISBN ，以免造成不必要的麻烦 ***");
+	printf("请输入您所要归还的图书的ISBN号码： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || *buf == '\0')
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    rtbk"); return;
+		}
+	}
+	pBOOK p = getSingleBook(buf);
+	if (p == NULL)
+	{
+		puts("不存在你所要查找的图书哦");
+		return;
+	}
+	if ((___Result__return_book = bookReturn(buf)))
+	{
+		switch (___Result__return_book)
+		{
+			case -3:	puts("当前没有图书可以归还");									     break;
+			case -2:	puts("已借图书中查询不到该书");										 break;
+			case  1:	puts("书库中目前查询不到该书");										 break;
+			default:    crashViewer("0x00012442 ( 0x00120122 0x00001102)","还书未知异常");   break;
+		}
+		return;
+	}
+	puts("图书归还成功！");
+	return;
+}
+
+extern void bookBorrowListsViewer() {
+	char __BORROWED_BK[__BUFFBOOK__] = {'\0'};
+	size_t count = 0;
+	strcpy_s(__BORROWED_BK,__BUFFBOOK__,currentBody->book);
+	char **bbk = NULL;
+	size_t __BK_COUNT = explode('|',__BORROWED_BK,bbk);
+	if (!(__BK_COUNT - 1)) {
+		puts("当前没有借阅任何图书");
+		return;
+	} else {
+		printf("目前已经借阅 %ld 本图书\n\n", __BK_COUNT - 1);
+	}
+	puts("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	puts("+     ISBN      +            图书名称            +  还书时间  +       存储书库       + 是否超时 +");
+	puts("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	for (count = 1; count < __BK_COUNT; count++)
+	{
+		char **__BORROWED_TMP_SET = NULL;
+		explode(',',bbk[count],__BORROWED_TMP_SET);
+		pBOOK _TMP_BOOK		= getSingleBook(__BORROWED_TMP_SET[0]);
+		if (_TMP_BOOK == NULL)
+		{
+			printf("+ %13s + %30s + %10s + %20s + %8s +\n", __BORROWED_TMP_SET[0], "本书不存在","1970-01-01", "不存在", "已失效");
+			continue;
+		}
+		char *_TMP_DUETIME  = __BORROWED_TMP_SET[1];
+		time_t duetime = (time_t)stringToLong(_TMP_DUETIME); //取得当前时间戳
+		struct tm ptr;
+		char timefstr[__BUFFSIZE__] = { '\0' };
+		localtime_s(&ptr, &duetime);
+		if (&ptr == NULL)
+		{
+			return;
+		}
+		strftime(timefstr, sizeof(timefstr), "%F", &ptr);
+		char *DUE = NULL;
+		if (duetime - time(NULL) < 0)
+		{
+			DUE = "已超时";
+		}
+		else {
+			DUE = "未超时";
+		}
+		printf("+ %13s + %30s + %10s + %20s + %8s +\n",_TMP_BOOK->ISBN, _TMP_BOOK->name, timefstr,_TMP_BOOK->store,DUE);
+	}
+	puts("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	return; 
+}
+
+extern void bookChangeViewer()
+{
+	char buf[__BUFFSIZE__] = { '\0' };
+	puts("***注意 ：修改图书的时候请记住图书的ISBN ，以免造成不必要的麻烦 ***");
+	printf("请输入所要修改的图书的ISBN ：");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || *buf == '\0')
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	pBOOK temp = getSingleBook(buf);
+	if (temp == NULL)
+	{
+		puts("未查询到该图书");
+		return;
+	}
+	puts("目前已查找到本图书");
+	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	puts("+     ISBN      +            图书名称            +  入库时间  +       存储书库       + 剩余  +");
+	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	time_t nowtime = temp->addtime; //取得当前时间戳
+	struct tm ptr;
+	char timefstr[__BUFFSIZE__] = { '\0' };
+	localtime_s(&ptr, &nowtime);
+	if (&ptr == NULL)
+	{
+		return;
+	}
+	strftime(timefstr, sizeof(timefstr), "%F", &ptr);
+	printf_s("+ %13s + %30s + %10s + %20s + %5hd +\n", temp->ISBN, temp->name, timefstr, temp->store, (temp->total - temp->borrowed));
+	puts("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+	
+	while (1)
+	{
+		printf("请选择对图书的操作（1/修改| 2/删除），默认为修改： ");
+		while (gets_s(buf, __BUFFSIZE__) == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+		if (*buf == '\0' || strcmp(buf, "1") == 0)
+		{
+			break;
+		}
+		else if (strcmp(buf, "2") == 0) {
+			printf("您确定要删除《%s》这本书？请慎重(y/N): ",temp->name);
+			while (gets_s(buf, __BUFFSIZE__) == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+			}
+			if (strcmp(buf, "Y") == 0 || strcmp(buf, "y") == 0)
+			{
+				bookDeleteAdv(temp);
+				puts("图书删除成功");
+				return;
+			}
+		}
+	}
+	puts("***下面的信息修改请慎重，一旦修改将无法找回，不改变信息请回车***");
+	printf("请输入图书ISBN： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	if(strcmp(buf, "") != 0)
+		stringSave(temp->ISBN, delspace(buf));
+
+	printf("请输入图书书名： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL )
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	if (strcmp(buf, "") != 0)
+		stringSave(temp->name, buf);
+	printf("请输入图书作者： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL )
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	if (strcmp(buf, "") != 0)
+		stringSave(temp->author, buf);
+	printf("请输入图书出版社： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL )
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	if (strcmp(buf, "") != 0)
+	stringSave(temp->publish, buf);
+	printf("请输入图书书库： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	if (strcmp(buf, "") != 0)
+	stringSave(temp->store, buf);
+	printf("请输入图书总量： ");
+	while ((state = gets_s(buf, __BUFFSIZE__)) == NULL)
+	{
+		if (state == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+	}
+	if (strcmp(buf, "") != 0)
+		temp->total = (short)stringToLong(buf);
+	bookDetails(temp);
+	puts("已经修改成功！");
 	return;
 }
