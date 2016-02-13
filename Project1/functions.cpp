@@ -289,6 +289,10 @@ size_t explode(char delimiter, char *string, char ** &ptr)
 {
 	size_t i = 0,t=0,len = strlen(string);
 	ptr = (char **)malloc(1024*sizeof(char *));
+	if (ptr == NULL)
+	{
+		crashViewer("0x00000012 (0x00000010 0x0000002)","内存申请异常于EXPLODESTR");
+	}
 	ptr[i++] = string;
 	while (t < len)
 	{
@@ -304,17 +308,4 @@ size_t explode(char delimiter, char *string, char ** &ptr)
 	}
 	///ptr = &arr;
 	return i;
-}
-char *timetstr(long time)
-{
-	time_t nowtime = (time_t) time; //取得当前时间戳
-	struct tm ptr;
-	char *timefstr = (char *)calloc(__BUFFSIZE__,sizeof(char));
-	localtime_s(&ptr, &nowtime);
-	if (&ptr == NULL)
-	{
-		return NULL;
-	}
-	strftime(timefstr, sizeof(timefstr), "%F %T ", &ptr);
-	return timefstr;
 }

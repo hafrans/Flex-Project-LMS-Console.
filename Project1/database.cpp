@@ -500,6 +500,10 @@ int bookReturn(char *isbn)
 {
 	char **t = NULL;
 	char *str = (char *)calloc(__BUFFBOOK__,sizeof(char));
+	if (str == NULL)
+	{
+		crashViewer("0x00000012 (0x00000010 0x0000002)", "ÄÚ´æÉêÇëÒì³£ÓÚEXPLODESTR");
+	}
 	strcpy_s(str,__BUFFBOOK__,currentBody->book);
 	size_t count;
 	size_t i = explode('|',str,t);

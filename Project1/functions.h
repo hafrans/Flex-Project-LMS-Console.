@@ -56,10 +56,6 @@ extern const char *testCharNULLPTRToEmptyString(const char *text);
 */
 extern size_t explode(char delimiter, char * string, char **& ptr);
 /*
-	时间戳转时间
-*/
-extern char * timetstr(long time);
-/*
 	int 型转为字符串
 */
 extern char *integerToString(int num);
