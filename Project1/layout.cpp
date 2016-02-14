@@ -9,7 +9,7 @@ inline void firstPageDrawText(char *text = "请等待", int wait = 0, char *version
 	consoledrawBorder(1, 1, ALIGN_CENTER);
 	consoledrawBorder(2, 1, ALIGN_CENTER);
 	consoleDrawText("Hafrans Flex Library Management System");
-	consoledrawBorder(2, 3, ALIGN_CENTER);
+	consoledrawBorder(2, 7, ALIGN_CENTER);
 	consoleDrawText(text, ALIGN_CENTER, ALIGN_CENTER);
 	consoledrawBorder(2, 2, ALIGN_CENTER);
 	consoleDrawText("Copy Right (c) 2009-2016 Hafran Inc. All Rights Reserved.");
@@ -61,6 +61,7 @@ extern void loginPageViewer()
 	consoledrawBorder(2, 2, ALIGN_CENTER);
 	consoleDrawText("*1):登录");
 	consoleDrawText("*2):注册");
+	consoleDrawText("*3):退出");
 	consoledrawBorder(2, 1, ALIGN_CENTER);
 	consoleDrawText("Copy Right (c) 2009-2016 Hafran Inc. All Rights Reserved.");
 	consoleDrawText(config->version, ALIGN_CENTER, ALIGN_RIGHT);
@@ -370,7 +371,7 @@ extern int userLogin()
 				return -2;
 			}
 			currentUsr = (*p)->username;
-			currentPer = (*p)->permission;
+			currentPer = (int)(*p)->permission;
 			currentBody = *p;
 			loginStatus(SUCCESS);
 			return 0;
@@ -445,10 +446,11 @@ extern void mainLayoutViewer()
 		consoleDrawText("(9/fdur)查询用户     (0/adur)增加用户");
 		consoleDrawText("(a/adbk)添加图书     (b/cgbk)修改图书");
 	}
-	consoleDrawText("(?/help)命令查询     (e/exit)退出系统");
+	consoleDrawText("(?/help)命令查询     (q/quit)注销用户");
+	consoleDrawText("(e/exit)退出系统");
 	consoledrawBorder(2, 1, ALIGN_CENTER);
 	consoleDrawText("请输入代码或者快捷命令进行操作");
-	//consoleDrawText("(c/dhbd)系统情况     (d/cusr)修改用户");
+	consoleDrawText("误操作请按ctrl+z Enter退出该命令");
 	consoledrawBorder(2, 1, ALIGN_CENTER);
 	consoledrawBorder(1, 1, ALIGN_CENTER);
 	
@@ -517,19 +519,7 @@ extern void bookAppend()
 			}
 		}
 		p->total = (short)stringToLong(buf);
-		LearnTest:
-		printf("请输入图书已借数量： ");
-		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
-		{
-			if (state == NULL)
-			{
-				puts("\n\n[ +1 ]      Stopped    adbk"); return;
-			}
-		}
-		if (p->total < (short)stringToLong(buf))
-			printf("[*有点多~]\n");
-			goto LearnTest;
-		p->borrowed = (short)stringToLong(buf);
+		p->borrowed = (short)0;
 		p->addtime = (long)time(NULL);
 		bookDetails(p);
 		printf("您确认添加该图书？(y/N) ");
@@ -616,6 +606,12 @@ extern void userPwdChange()
 			}
 			else
 			{
+				if (strlen(buf) < 4 || strlen(buf) >= 16)
+				{
+					puts("密码长度不太对！修改失败，请重试！");
+					return;
+					
+				}
 				stringSave(currentBody->passwd, buf);
 				puts("密码修改成功，本次成功关闭后，下次登录时请使用新密码");
 			}
@@ -858,6 +854,33 @@ extern void changeUserViewer()
 			continue;
 		}
 	}
+	
+	while (1)
+	{
+		printf("请选择对用户的操作（1/修改| 2/删除），默认为修改： ");
+		while (gets_s(buf, __BUFFSIZE__) == NULL)
+		{
+			puts("\n\n[ +1 ]      Stopped    cgbk"); return;
+		}
+		if (*buf == '\0' || strcmp(buf, "1") == 0)
+		{
+			break;
+		}
+		else if (strcmp(buf, "2") == 0) {
+			printf("您确定要删除%s？请慎重(y/N): ", (*p)->username);
+			while (gets_s(buf, __BUFFSIZE__) == NULL)
+			{
+				puts("\n\n[ +1 ]      Stopped    cgur"); return;
+			}
+			if (strcmp(buf, "Y") == 0 || strcmp(buf, "y") == 0)
+			{
+				userDeleteAdv(*p);
+				puts("用户删除成功");
+				return;
+			}
+		}
+	}
+
 	printf("请输入用户密码，回车默认不修改： ");
 	while (gets_s(buf, __BUFFSIZE__) == NULL );
 	if (strcmp(buf, "") != 0)

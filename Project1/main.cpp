@@ -31,22 +31,36 @@ int main()
 #else
 	while (currentUsr == NULL)
 	{
-		char buf[__BUFFSIZE__] = { '\0' };
-		loginPageViewer();
-		printf("请输入选项： ");
-		gets_s(buf,__BUFFSIZE__);
-		if (strcmp(buf, "1") == 0)
+		while (currentUsr == NULL)
 		{
-			userLogin();
+			char buf[__BUFFSIZE__] = { '\0' };
+			loginPageViewer();
+			printf("请输入选项： ");
+			gets_s(buf, __BUFFSIZE__);
+			if (strcmp(buf, "1") == 0)
+			{
+				userLogin();
+			}
+			else if (strcmp(buf, "2") == 0)
+			{
+				userRegister();
+				flushUSER(0);
+			}
+			else if (strcmp(buf, "3") == 0)
+			{
+				printf("将要退出程序。。\n");
+				Sleep(1500);
+				puts("正在退出...");
+				Sleep(1500);
+				flushBOOK(0);
+				flushUSER(0);
+				return 0;
+
+			}
 		}
-		else if (strcmp(buf, "2") == 0)
-		{
-			userRegister();
-			flushUSER(0);
-		}
+		mainLayoutViewer();
+		consoleWaitinCMD();
 	}
-	mainLayoutViewer();
-	consoleWaitinCMD();
 #endif
 	/*bookDetails(head);
 	Sleep(1520);
@@ -60,20 +74,6 @@ int main()
 	*/
 	pUSER *p = userSelect("2",1,1);
 	currentBody = *p;
-	//selectBooksViewer();
-	//bookBorrow("9787123433242",BDAY);
-	int pt = 0;
-	pt = bookReturn("9784323242");
-	printf("%d",pt);
-
-
-	
-
-
-
-
-
-
 	puts("已到达程序底部");
 	getchar();
 #endif

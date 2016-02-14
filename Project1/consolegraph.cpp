@@ -168,6 +168,7 @@ extern void consoleNewLine(int count = 1)
 
 void consoleWaitinCMD()
 {
+	//printf("%d",currentPer);
 	char cmd[__BUFFSIZE__] = {'\0'};
 	char cmdc = '$';
 	if (currentPer == 9)
@@ -181,7 +182,7 @@ void consoleWaitinCMD()
 		{
 			continue;
 		}
-		if (strcmp(cmd,"adbk") == 0 || strcmp(cmd, "a") == 0 || strcmp(cmd, "A") == 0)
+		if ((strcmp(cmd,"adbk") == 0 || strcmp(cmd, "a") == 0 || strcmp(cmd, "A") == 0) && currentPer > 5)
 		{
 			bookAppend();
 			flushBOOK(0);
@@ -250,13 +251,22 @@ void consoleWaitinCMD()
 		}
 		else if (strcmp(cmd, "exit") == 0 || strcmp(cmd, "E") == 0 || strcmp(cmd, "e") == 0)
 		{
-			printf("将要退出程序，请回车继续。。");
+			printf("将要退出程序。。\n");
 			Sleep(1500);
 			puts("正在退出...");
 			Sleep(1500);
 			return;
 		}
-		else if (strcmp(cmd, "adur") == 0 || *cmd == '0' && currentPer > 5)
+		else if (strcmp(cmd, "quit") == 0 || strcmp(cmd, "Q") == 0 || strcmp(cmd, "q") == 0)
+		{
+			currentBody = NULL;
+			currentPer = -1;
+			currentUsr = NULL;
+			puts("正在登出...");
+			Sleep(1500);
+			return;
+		}
+		else if ((strcmp(cmd, "adur") == 0 || *cmd == '0' ) && currentPer > 5)
 		{
 			userRegister();
 		}
@@ -264,19 +274,19 @@ void consoleWaitinCMD()
 		{
 			selectBooksViewer();
 		}
-		else if (strcmp(cmd, "dhbd") == 0 || *cmd == '7' && currentPer > 5)
+		else if ((strcmp(cmd, "dhbd") == 0 || *cmd == '7' )&& currentPer > 5)
 		{
 			systemInfoViewer();
 		}
-		else if (strcmp(cmd, "fdur") == 0 || *cmd == '9' && currentPer > 5)
+		else if ((strcmp(cmd, "fdur") == 0 || *cmd == '9' )&& currentPer > 5)
 		{
 			userSelectViewer();
 		}
-		else if (strcmp(cmd, "cusr") == 0 || *cmd == '8' && currentPer > 5)
+		else if ((strcmp(cmd, "cusr") == 0 || *cmd == '8') && currentPer > 5)
 		{
 			changeUserViewer();
 		}
-		else if (strcmp(cmd, "cgbk") == 0 || strcmp(cmd, "b") == 0 || strcmp(cmd, "B") == 0 && currentPer > 5)
+		else if ((strcmp(cmd, "cgbk") == 0 || strcmp(cmd, "b") == 0 || strcmp(cmd, "B") == 0 )&& currentPer > 5)
 		{
 			bookChangeViewer();
 			flushBOOK(0);
