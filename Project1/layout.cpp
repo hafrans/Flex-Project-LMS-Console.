@@ -249,19 +249,19 @@ extern int userRegister()
 			{
 				printf("请输入该用户的权限 ");
 				scanf_s("%c",&*buf,1);
+				int c;
+				while ((c = getchar()) != '\n' && c != EOF );
 			}
 			p->permission = (int)(*buf - 48);
-			int c;
-			while ((c = getchar()) != '\n' && c != EOF);
 			stringSave(buf, "");
 			while (!isdigit(*buf) && *buf < '9')
 			{
 				printf("请输入该用户的状态 ");
 				scanf_s("%c", &*buf,1);
+				int c;
+				while ((c = getchar()) != EOF && c != '\n');
 			}
 			p->status = (int)(*buf - 48);
-			stringSave(buf, "");
-			while ((c = getchar()) != '\n' && c != EOF);
 		}
 		consoleClear();
 		sprintf_s(buf, __BUFFSIZE__, "用户名： %s     密　码： %s", p->username, p->passwd);
@@ -517,6 +517,7 @@ extern void bookAppend()
 			}
 		}
 		p->total = (short)stringToLong(buf);
+		LearnTest:
 		printf("请输入图书已借数量： ");
 		while ((state = gets_s(buf, __BUFFSIZE__)) == NULL || strcmp(buf, "") == 0)
 		{
@@ -525,6 +526,9 @@ extern void bookAppend()
 				puts("\n\n[ +1 ]      Stopped    adbk"); return;
 			}
 		}
+		if (p->total < (short)stringToLong(buf))
+			printf("[*有点多~]\n");
+			goto LearnTest;
 		p->borrowed = (short)stringToLong(buf);
 		p->addtime = (long)time(NULL);
 		bookDetails(p);
